@@ -98,12 +98,15 @@ export function CodeAuthorizationForm({
     return () => intervalClear();
   }, []);
 
-  useEffect(() => {
-    if (code.length === codeLength) {
-      intervalClear();
-      onSubmit();
-    }
-  }, [code, codeLength]);
+  useEffect(
+    () => {
+      if (code.length === codeLength) {
+        intervalClear();
+        onSubmit();
+      }
+    },
+    [code, codeLength],
+  );
 
   return (
     <L10n>

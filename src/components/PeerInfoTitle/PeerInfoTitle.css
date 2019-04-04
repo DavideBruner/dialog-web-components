@@ -16,10 +16,16 @@
   align-items: center;
   justify-content: flex-start;
   flex-flow: row nowrap;
+  width: 100%;
 }
 
 .title {
   flex: 0 0 auto;
+  /* Move? */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+  white-space: nowrap;
 }
 
 .userName {
