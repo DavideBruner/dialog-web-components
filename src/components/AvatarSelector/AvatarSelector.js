@@ -19,6 +19,8 @@ export type Props = {
   avatar: ?(string | File),
   onChange: (avatar: File) => void,
   onRemove?: () => void,
+  // MIME-types of image like 'image/png', 'image/gif' and so on
+  mimeTypes: ?(string[]),
 };
 
 type State = {
@@ -28,6 +30,7 @@ type State = {
 class AvatarSelector extends PureComponent<Props, State> {
   static defaultProps = {
     size: 140,
+    mimeTypes: ['image/*'],
   };
 
   constructor(props: Props) {
@@ -65,7 +68,7 @@ class AvatarSelector extends PureComponent<Props, State> {
         }
       },
       false,
-      'image/*',
+      this.props.mimeTypes.join(','),
     );
   };
 
