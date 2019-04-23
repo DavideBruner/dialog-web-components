@@ -50,12 +50,20 @@ class CreateGroupInfoForm extends PureComponent<Props, State> {
     this.state = {
       avatar: null,
       isPublic: Boolean(props.shortname),
+      isUsersVisible: props.type === 'group',
     };
   }
 
   componentDidMount() {
     if (this.props.avatar) {
       fileToBase64(this.props.avatar, (avatar) => this.setState({ avatar }));
+    }
+
+    // in group users always see other users by default
+    if (this.props.type === 'group') {
+      this.props.onChangeIsUsersVisible(true);
+    } else if (this.props.type === 'channel') {
+      this.props.onChangeIsUsersVisible(false);
     }
   }
 
@@ -83,6 +91,12 @@ class CreateGroupInfoForm extends PureComponent<Props, State> {
 
   handlePublicToggle = (isPublic: boolean): void => {
     this.setState({ isPublic });
+  };
+
+  handleChangeIsUsersVisible = (isUsersVisible: boolean): void => {
+    this.setState({ isUsersVisible });
+
+    this.props.onChangeIsUsersVisible(isUsersVisible);
   };
 
   setShortnameInput = (shortnameInput: ?InputNext): void => {
@@ -140,6 +154,27 @@ class CreateGroupInfoForm extends PureComponent<Props, State> {
     );
   }
 
+  renderIsUsersVisibleSwitcher() {
+    const { type, id, isUsersVisibleEnabled } = this.props;
+
+    if (!isUsersVisibleEnabled) {
+      return null;
+    }
+
+    return (
+      <div className={styles.shortnameWrapper}>
+        <Switcher
+          id={`${id}_users_visible_swither`}
+          name={`${id}_users_visible_swither`}
+          value={this.state.isUsersVisible}
+          onChange={this.handleChangeIsUsersVisible}
+          label={`CreateNewModal.${type}.users_visible`}
+          className={styles.switcher}
+        />
+      </div>
+    );
+  }
+
   render() {
     const { id, type, about, aboutMaxLength, title, vertical } = this.props;
     const className = classNames(
@@ -175,6 +210,7 @@ class CreateGroupInfoForm extends PureComponent<Props, State> {
             value={about || ''}
             maxLength={aboutMaxLength}
           />
+          {this.renderIsUsersVisibleSwitcher()}
           {this.renderShortname()}
         </form>
       </div>

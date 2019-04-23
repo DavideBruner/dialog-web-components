@@ -12,6 +12,7 @@ const initial = {
     about: '',
     avatar: null,
     members: PeerInfoSelectorState.create(contacts),
+    isUsersVisible: false,
   },
 };
 initialState = initial;
@@ -19,9 +20,11 @@ initialState = initial;
 const handleOpen = () => setState({ isOpen: true });
 const handleClose = () => setState(initial);
 const handleRequestChange = (request) => setState({ request });
+const handleChangeIsUsersVisible = (isUsersVisible) =>
+  setState({ request: { ...state.request, isUsersVisible } });
 const handleStepChange = (step) => setState({ step });
 const handleSubmit = (request) => {
-  console.debug(request);
+  console.log(request);
   setState(initial);
 };
 
@@ -39,6 +42,7 @@ const handleSubmit = (request) => {
       maxGroupSize={4}
       onRequestChange={handleRequestChange}
       onStepChange={handleStepChange}
+      onChangeIsUsersVisible={handleChangeIsUsersVisible}
       onSubmit={handleSubmit}
     />
   ) : null}

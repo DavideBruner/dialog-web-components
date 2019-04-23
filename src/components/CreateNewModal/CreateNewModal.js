@@ -28,6 +28,7 @@ class CreateNewModal extends PureComponent<Props> {
     id: 'create_new_modal',
     isPublicGroupsEnabled: true,
     isMaxGroupSizeVisible: false,
+    isUsersVisibleEnabled: true,
   };
 
   handlePrevStepClick = (): void => {
@@ -201,8 +202,9 @@ class CreateNewModal extends PureComponent<Props> {
     const {
       id,
       step,
-      request: { type, about, title, shortname, avatar },
+      request: { type, about, title, shortname, avatar, isUsersVisible },
       shortnamePrefix,
+      onChangeIsUsersVisible,
     } = this.props;
 
     return (
@@ -229,6 +231,7 @@ class CreateNewModal extends PureComponent<Props> {
             about={about}
             title={title}
             avatar={avatar}
+            isUsersVisible={isUsersVisible}
             shortname={shortname}
             shortnamePrefix={shortnamePrefix}
             onChange={this.handleChange}
@@ -236,6 +239,8 @@ class CreateNewModal extends PureComponent<Props> {
             onAvatarRemove={this.handleAvatarRemove}
             onAvatarChange={this.handleAvatarEdit}
             isPublicGroupsEnabled={this.props.isPublicGroupsEnabled}
+            onChangeIsUsersVisible={onChangeIsUsersVisible}
+            isUsersVisibleEnabled={this.props.isUsersVisibleEnabled}
           />
         </ModalBody>
         <ModalFooter className={styles.footer}>

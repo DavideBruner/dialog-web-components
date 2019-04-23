@@ -15,6 +15,7 @@ group:
   public: Make this group public
   error:
     max_group_size: You cannot add such many people to the group
+  users_visible: Users can see other participants of this group
 
 channel:
   title: Create new channel
@@ -31,6 +32,7 @@ channel:
     shortname: Channel link
   finish: Create channel
   public: Make this channel public
+  users_visible: Users can see other participants of this channel
 
 next:
   type: Add info

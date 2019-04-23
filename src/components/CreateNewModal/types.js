@@ -13,6 +13,7 @@ export type Request = {
   about: string,
   avatar: ?File,
   members: SelectorState<PeerInfo>,
+  isUsersVisible: ?boolean,
 };
 
 export type Step = 'type' | 'info' | 'avatar' | 'members';
@@ -33,4 +34,6 @@ export type Props = {
   onStepChange: (step: Step) => mixed,
   onRequestChange: (request: Request) => mixed,
   isMaxGroupSizeVisible: boolean,
+  isUsersVisibleEnabled: ?boolean,
+  onChangeIsUsersVisible: (isUsersVisible: boolean) => mixed,
 };
