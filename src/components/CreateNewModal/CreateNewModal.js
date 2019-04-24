@@ -28,7 +28,7 @@ class CreateNewModal extends PureComponent<Props> {
     id: 'create_new_modal',
     isPublicGroupsEnabled: true,
     isMaxGroupSizeVisible: false,
-    isUsersVisibleEnabled: true,
+    isUsersVisibleEnabled: false,
   };
 
   handlePrevStepClick = (): void => {
@@ -101,6 +101,12 @@ class CreateNewModal extends PureComponent<Props> {
 
   handleCancelAvatarEdit = (): void => {
     this.props.onStepChange('info');
+  };
+
+  handleChangeIsUsersVisible = (isUsersVisible: boolean): void => {
+    if (this.props.onChangeIsUsersVisible) {
+      this.props.onChangeIsUsersVisible(isUsersVisible);
+    }
   };
 
   handleHotkey = (hotkey: string, event: KeyboardEvent): void => {
@@ -204,7 +210,8 @@ class CreateNewModal extends PureComponent<Props> {
       step,
       request: { type, about, title, shortname, avatar, isUsersVisible },
       shortnamePrefix,
-      onChangeIsUsersVisible,
+      isUsersVisibleEnabled,
+      isPublicGroupsEnabled,
     } = this.props;
 
     return (
@@ -231,16 +238,16 @@ class CreateNewModal extends PureComponent<Props> {
             about={about}
             title={title}
             avatar={avatar}
-            isUsersVisible={isUsersVisible}
             shortname={shortname}
             shortnamePrefix={shortnamePrefix}
             onChange={this.handleChange}
             onSubmit={this.handleNextStepClick}
             onAvatarRemove={this.handleAvatarRemove}
             onAvatarChange={this.handleAvatarEdit}
-            isPublicGroupsEnabled={this.props.isPublicGroupsEnabled}
-            onChangeIsUsersVisible={onChangeIsUsersVisible}
-            isUsersVisibleEnabled={this.props.isUsersVisibleEnabled}
+            isPublicGroupsEnabled={isPublicGroupsEnabled}
+            isUsersVisible={isUsersVisible}
+            isUsersVisibleEnabled={isUsersVisibleEnabled}
+            onChangeIsUsersVisible={this.handleChangeIsUsersVisible}
           />
         </ModalBody>
         <ModalFooter className={styles.footer}>

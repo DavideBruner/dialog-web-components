@@ -174,6 +174,33 @@ class EditGroupModalForm extends PureComponent<Props, State> {
     );
   }
 
+  renderIsUsersVisibleSwitcher() {
+    const {
+      group: { type },
+      id,
+      isUsersVisible,
+      isUsersVisibleEnabled,
+      onChangeIsUsersVisible,
+    } = this.props;
+
+    if (!isUsersVisibleEnabled) {
+      return null;
+    }
+
+    return (
+      <div className={styles.shortnameWrapper}>
+        <Switcher
+          id={`${id}_users_visible_swither`}
+          name={`${id}_users_visible_swither`}
+          value={isUsersVisible}
+          onChange={onChangeIsUsersVisible}
+          label={`CreateNewModal.${type}.users_visible`}
+          className={styles.switcher}
+        />
+      </div>
+    );
+  }
+
   render() {
     const { group, about, name, vertical, id, aboutMaxLength } = this.props;
     const className = classNames(
@@ -219,6 +246,7 @@ class EditGroupModalForm extends PureComponent<Props, State> {
             value={about.value || ''}
             {...this.getInputState('about')}
           />
+          {this.renderIsUsersVisibleSwitcher()}
           {this.renderShortname()}
         </form>
       </div>

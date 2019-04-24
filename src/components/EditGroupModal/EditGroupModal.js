@@ -22,6 +22,7 @@ import HotKeys from '../HotKeys/HotKeys';
 class EditGroupModal extends PureComponent<Props, State> {
   static defaultProps = {
     isPublicGroupsEnabled: true,
+    isUsersVisibleEnabled: false,
   };
 
   constructor(props: Props) {
@@ -34,6 +35,7 @@ class EditGroupModal extends PureComponent<Props, State> {
         about: props.group.about,
         shortname: props.group.shortname,
         avatar: props.group.avatar,
+        isUsersVisible: props.group.isUsersVisible,
       },
     };
   }
@@ -44,6 +46,17 @@ class EditGroupModal extends PureComponent<Props, State> {
         group: {
           ...group,
           [target.name]: value,
+        },
+      };
+    });
+  };
+
+  handleChangeIsUsersVisible = (isUsersVisible: boolean): void => {
+    this.setState(({ group }) => {
+      return {
+        group: {
+          ...group,
+          isUsersVisible,
         },
       };
     });
@@ -190,6 +203,9 @@ class EditGroupModal extends PureComponent<Props, State> {
         onSubmit={this.handleSubmit}
         onAvatarChange={this.handleAvatarEdit}
         onAvatarRemove={this.handleAvatarRemove}
+        isUsersVisible={this.state.group.isUsersVisible}
+        onChangeIsUsersVisible={this.handleChangeIsUsersVisible}
+        isUsersVisibleEnabled={this.props.isUsersVisibleEnabled}
       />
     );
   }

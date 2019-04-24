@@ -44,6 +44,7 @@ const handleSubmit = (request) => {
       onStepChange={handleStepChange}
       onChangeIsUsersVisible={handleChangeIsUsersVisible}
       onSubmit={handleSubmit}
+      isUsersVisibleEnabled
     />
   ) : null}
 </div>;
