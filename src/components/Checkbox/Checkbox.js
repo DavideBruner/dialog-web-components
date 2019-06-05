@@ -52,11 +52,12 @@ class Checkbox extends PureComponent<Props> {
       <div className={className}>
         <input
           className={styles.checkbox}
-          type="checkbox"
           id={id}
+          ref={this.setInput}
+          type="checkbox"
           checked={value}
           tabIndex={tabIndex}
-          ref={this.setInput}
+          disabled={disabled}
           onChange={onChange}
         />
 

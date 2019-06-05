@@ -21,12 +21,12 @@ Hello, @dialog
 
 ## List items
 
-- List item 1
-- List item 2
-  - Secondary list 1
-  - Secondary list 2
-  - Secondary list 3
-- List item 3
+ - List item 1
+ - List item 2
+ - List item 3
+ - [ ] task 1
+ - [x] done task
+ - Next list item
 
 ```
 Ex debitis reprehendunt cum, ancillae reformidans neglegentur eos ad. Eum no mollis persecuti, ex sed reque maluisset vituperatoribus. Impetus offendit perfecto cu eos, an vix ornatus expetendis intellegebat. Legimus facilisis ut nam. Has ne alii veniam epicuri, ad vidisse iuvaret ullamcorper has. Laoreet gubergren eam et.

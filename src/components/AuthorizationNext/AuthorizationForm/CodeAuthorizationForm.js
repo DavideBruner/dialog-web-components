@@ -96,14 +96,14 @@ export function CodeAuthorizationForm({
 
     // Clear interval on component unmount
     return () => intervalClear();
-  }, []);
+  }, [createResendTimer, intervalClear]);
 
   useEffect(() => {
     if (code.length === codeLength) {
       intervalClear();
       onSubmit();
     }
-  }, [code, codeLength]);
+  }, [code, codeLength, intervalClear, onSubmit]);
 
   return (
     <L10n>

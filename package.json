@@ -94,7 +94,7 @@
     "@dlghq/dialog-types": "1.38.0",
     "@dlghq/emoji": "2.2.0",
     "@dlghq/eslint-config-dialog": "4.0.8",
-    "@dlghq/markdown": "1.5.3",
+    "@dlghq/markdown": "1.6.0",
     "@dlghq/postcss-dialog": "1.13.1",
     "@dlghq/react-l10n": "0.9.3",
     "@dlghq/stylelint-config-dialog": "0.11.0",
@@ -142,7 +142,7 @@
     }
   },
   "lint-staged": {
-    "src/**/*.{js,json,css,md}": [
+    "src/**/*.{js,json,css,md},!src/fixtures/markdown.md": [
       "prettier --write",
       "git add"
     ]
