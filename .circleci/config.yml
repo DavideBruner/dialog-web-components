@@ -1,0 +1,150 @@
+# CircleCI Config
+
+version: 2
+
+defaults_run: &defaults_run
+  name: run defaults
+  command: |
+    echo "//registry.npmjs.org/:_authToken=$NPM_AUTH_TOKEN" > ~/.npmrc
+    git config user.name "$GIT_NAME"
+    git config user.email "$GIT_EMAIL"
+    npm ci
+
+git_config: &git_config
+  name: configure git bot
+  command: |
+    if [ -z "$CIRCLE_PR_USERNAME" -a "$CIRCLE_USERNAME" != "dialog-bot" -a -n "$CIRCLE_USERNAME" ]
+    then
+      apt-get update
+      apt-get install gnupg2 -y
+      echo "$GITHUB_BOT_GPG_KEY" | base64 --decode > private.key
+      gpg2 --version
+      gpg2 --allow-secret-key-import --import private.key
+      git config gpg.program gpg2
+      git config commit.gpgsign true
+      git config user.signingkey "$GITHUB_BOT_GPG_KEY_ID"
+      git config credential.helper 'cache --timeout=120'
+      git config user.name "$GITHUB_BOT_USERNAME"
+      git config user.email "$GITHUB_BOT_EMAIL"
+    fi
+
+jobs:
+  build:
+    docker:
+      - image: node:10
+    steps:
+      - checkout
+      - run:
+          <<: *defaults_run
+      - run: |
+          npm run build
+          npm test
+      - save_cache:
+          key: dialog-components-{{ .Branch }}
+          paths:
+            - node_modules
+
+  sonar_scan:
+    docker:
+      - image: node:10
+    steps:
+      - checkout
+      - run:
+          <<: *defaults_run
+      - run: |
+          ./node_modules/.bin/sonar-scanner \
+            -Dsonar.projectKey=dialogs_dialog-web-components \
+            -Dsonar.organization=dialogs \
+            -Dsonar.sources=src/ \
+            -Dsonar.host.url=https://sonarcloud.io \
+            -Dsonar.login=${SONAR_TOKEN}
+      - save_cache:
+          key: dialog-components-sonar-cube
+          paths:
+            - ~/.sonar
+
+  deployment:
+    docker:
+      - image: node:10
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - dialog-components-{{ .Branch }}
+      - run:
+          <<: *defaults_run
+      - run:
+          <<: *git_config
+      - run: |
+          git remote set-url origin https://${GITHUB_BOT_TOKEN}@github.com/dialogs/dialog-web-components.git
+          npm run docs
+
+  npm_publish_prerelease:
+    docker:
+      - image: node:10
+    steps:
+      - checkout
+      - run:
+          <<: *defaults_run
+      - run:
+          <<: *git_config
+      - run: |
+          [[ $CIRCLE_BRANCH = "develop" ]] && npm_tag="next" || npm_tag=$CIRCLE_BRANCH
+          if [ -z "$CIRCLE_PR_USERNAME" -a "$CIRCLE_USERNAME" != "dialog-bot" -a -n "$CIRCLE_USERNAME" ]
+          then
+            npm version prerelease --preid=${CIRCLE_BRANCH//[\/_]/-}.${CIRCLE_BUILD_NUM} --ignore-scripts
+            npm publish --tag=${npm_tag}
+          fi
+
+  npm_publish_release:
+    docker:
+      - image: node:10
+    steps:
+      - checkout
+      - run:
+          <<: *defaults_run
+      - run:
+          <<: *git_config
+      - run: |
+          if [ "$CIRCLE_USERNAME" != "dialog-bot" -a -n "$CIRCLE_USERNAME" ]
+          then
+            npm test
+            npm version minor --ignore-scripts
+            npm run build
+            npm publish
+            git push -q --follow-tags https://${GITHUB_BOT_TOKEN}@github.com/dialogs/dialog-web-components.git ${CIRCLE_BRANCH}
+          fi
+
+workflows:
+  version: 2
+  build-deploy:
+    jobs:
+      - build:
+          filters:
+            branches:
+              ignore:
+                - gh-pages
+      - sonar_scan:
+          filters:
+            branches:
+              ignore:
+                - gh-pages
+      - deployment:
+          requires:
+            - build
+          filters:
+            branches:
+              only:
+                - master
+      - npm_publish_release:
+          requires:
+            - build
+          filters:
+            branches:
+              only: master
+      - npm_publish_prerelease:
+          requires:
+            - build
+          filters:
+            branches:
+              ignore: master
