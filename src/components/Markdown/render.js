@@ -41,6 +41,10 @@ export function renderBlocks(
 
   const isOnlyEmoji = containsOnlyEmoji(tokens);
 
+  function handleListChange(id, value) {
+    console.log('checkbox changed', { id, value });
+  }
+
   for (let i = 0; i < tokens.length; i++) {
     const token = tokens[i];
 
@@ -85,9 +89,7 @@ export function renderBlocks(
             content={token.content}
             emojiSize={emojiSize}
             isEditable={isEditable}
-            onChange={(id, value) =>
-              console.log('checkbox changed', { id, value })
-            }
+            onChange={handleListChange}
           />,
         );
         break;

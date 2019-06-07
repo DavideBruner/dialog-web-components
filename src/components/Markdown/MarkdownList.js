@@ -15,7 +15,7 @@ type MarkdownListProps = {
   content: Array<ListItem>,
   emojiSize: number,
   isEditable: boolean,
-  onChange: (idx: Number, value: boolean) => void,
+  onChange: (idx: number, value: boolean) => void,
 };
 
 function MarkdownList({
@@ -27,20 +27,24 @@ function MarkdownList({
 }: MarkdownListProps) {
   return (
     <ul className={styles.list}>
-      {content.map((item, i) => {
+      {content.map((item, index) => {
         const isCheckbox = typeof item.done === 'boolean';
         const listItemClassName = classNames(styles.listItem, {
           [styles.listItemBoolean]: isCheckbox,
         });
 
+        function handleChange() {
+          onChange(index, !item.done);
+        }
+
         return (
-          <li key={i} className={listItemClassName}>
+          <li key={index} className={listItemClassName}>
             {isCheckbox ? (
               <Checkbox
-                id={idPrefix + '_' + i}
+                id={idPrefix + '_' + index}
                 value={item.done}
                 disabled={!isEditable}
-                onChange={() => onChange(i, !item.done)}
+                onChange={handleChange}
                 label={
                   <MarkdownText
                     tokens={item.content}
