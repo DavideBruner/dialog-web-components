@@ -146,4 +146,21 @@
   display: block;
 }
 
+.list {
+  margin: calc(var(--default-padding) / 2) 0;
+  padding: 0;
+}
+
+.listItem {
+  line-height: 24px;
+  margin-left: 24px;
+  padding-left: 10px;
+}
+
+.listItemBoolean {
+  list-style: none;
+  margin-left: 2px;
+  padding-left: 0;
+}
+
 /* .emoji {} */
