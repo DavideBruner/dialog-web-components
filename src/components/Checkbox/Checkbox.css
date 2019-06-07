@@ -10,7 +10,7 @@
 
 .container {
   all: initial;
-  height: var(--default-line-height);
+  height: 24px;
 }
 
 .checkbox {
@@ -57,7 +57,7 @@
 .disabled {
   opacity: 0.5;
 
-  &.label {
+  & .label {
     cursor: not-allowed;
   }
 }
